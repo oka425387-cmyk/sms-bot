@@ -1,4 +1,1 @@
-requests
-telethon
-structlog
-aiogram
+docker run -d -p 5000:5000 txtextcontrol/dsserver-core:latest
