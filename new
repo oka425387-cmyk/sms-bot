@@ -1,0 +1,34 @@
+import logging
+from aiogram import Bot, Dispatcher, executor, types
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+API_TOKEN = 'আপনার_বট_টোকেন'
+
+logging.basicConfig(level=logging.INFO)
+bot = Bot(token=API_TOKEN)
+dp = Dispatcher(bot)
+
+# ১. /start কমান্ড এবং বাটন দেওয়ার কোড এখানে বসাবেন
+@dp.message_handler(commands=['start'])
+async def send_welcome(message: types.Message):
+    keyboard = InlineKeyboardMarkup(row_width=2)
+    keyboard.add(
+        InlineKeyboardButton("💰 Balance", callback_data="check_balance"),
+        InlineKeyboardButton("📱 Get Number", callback_data="get_number")
+    )
+    await message.answer("স্বাগতম! নিচের অপশনগুলো থেকে বেছে নিন:", reply_markup=keyboard)
+
+# ২. বাটনে ক্লিক করলে কী কাজ হবে তার কোড এখানে বসাবেন
+@dp.callback_query_handler(text="check_balance")
+async def process_balance(callback_query: types.CallbackQuery):
+    await callback_query.message.answer("আপনার ব্যালেন্স চেক করা হচ্ছে...")
+    await callback_query.answer()
+
+@dp.callback_query_handler(text="get_number")
+async def process_get_number(callback_query: types.CallbackQuery):
+    await callback_query.message.answer("নাম্বার নিয়ে আসা হচ্ছে...")
+    await callback_query.answer()
+
+# ৩. ফাইলটির একদম শেষে এই রান করার লাইনটি থাকে
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True)
